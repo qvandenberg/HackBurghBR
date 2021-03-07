@@ -1,31 +1,6 @@
-brotlipy==0.7.0
-certifi==2020.6.20
-cffi @ file:///opt/concourse/worker/volumes/live/b9607b09-b777-4ff7-53dc-287727eb8574/volume/cffi_1600699191154/work
-chardet==3.0.4
-click==7.1.2
-cryptography @ file:///opt/concourse/worker/volumes/live/aeb63a26-659e-4edb-5405-74ba8e0c76f2/volume/cryptography_1601046839724/work
-cycler==0.10.0
-Flask==1.1.2
-idna @ file:///tmp/build/80754af9/idna_1593446292537/work
-itsdangerous==1.1.0
-Jinja2==2.11.2
-kiwisolver @ file:///opt/concourse/worker/volumes/live/0b2f3e77-eaa3-4995-7dd0-c994762fcbde/volume/kiwisolver_1612282417472/work
-MarkupSafe @ file:///opt/concourse/worker/volumes/live/cb778296-98db-45ad-411e-6f726e102dc3/volume/markupsafe_1594371638608/work
-matplotlib @ file:///opt/concourse/worker/volumes/live/41e8cd50-031f-4dda-5787-dd3c4f4e0f08/volume/matplotlib-suite_1613407855571/work
-mkl-fft==1.2.0
-mkl-random==1.1.1
-mkl-service==2.3.0
-numpy @ file:///opt/concourse/worker/volumes/live/c646f6b9-b398-438d-7dc7-c7142e0ba44b/volume/numpy_and_numpy_base_1596235504536/work
-olefile @ file:///home/conda/feedstock_root/build_artifacts/olefile_1602866521163/work
-Pillow @ file:///Users/runner/miniforge3/conda-bld/pillow_1593693221521/work
-pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
-pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1594392929924/work
-pyparsing==2.4.7
-PySocks @ file:///opt/concourse/worker/volumes/live/85a5b906-0e08-41d9-6f59-084cee4e9492/volume/pysocks_1594394636991/work
-python-dateutil==2.8.1
-requests @ file:///tmp/build/80754af9/requests_1592841827918/work
-scipy @ file:///opt/concourse/worker/volumes/live/7f5e51f8-abf3-4409-4c56-a4fb14cc9869/volume/scipy_1593104185999/work
-six==1.15.0
-tornado @ file:///Users/runner/miniforge3/conda-bld/tornado_1610094711612/work
-urllib3 @ file:///tmp/build/80754af9/urllib3_1603305693037/work
-Werkzeug==1.0.1
+Flask
+requests
+numpy
+scipy
+matplotlib
+pillow
