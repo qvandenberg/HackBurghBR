@@ -45,8 +45,8 @@ def compute_stock_parameters(symbol):
     symbol = difflib.get_close_matches(symbol, symbols)[0]
     price_series, dividend = get_closing_price_and_dividend(symbol, 100)
     print(price_series)
-    plt.plot(price_series)
-    plt.show()
+    # plt.plot(price_series)
+    # plt.show()
     pct_changes = np.diff(price_series) / price_series[:-1]
     log_returns = np.log(1 + pct_changes)
     mean_return = log_returns.mean()
@@ -78,7 +78,7 @@ def calculate_total_return(dt, starting_savings, monthly_saving, interest_rate, 
     stdev = np.tile(stdev, (num_iterations,1)).T
     annual_returns = np.exp(drift + stdev * norm.ppf(np.random.rand(len(times), num_iterations)))
     total_money = np.zeros_like(annual_returns)
-    low_bound, up_bound, mid = np.ones(annual_returns.shape[0]), np.ones(annual_returns.shape[0]), np.ones(annual_returns.shape[0])
+    low_bound, up_bound, mid = starting_savings * np.ones(annual_returns.shape[0]), starting_savings * np.ones(annual_returns.shape[0]), starting_savings * np.ones(annual_returns.shape[0])
     total_money[0] = starting_savings
 
     for t in range(1, len(times)):
@@ -94,40 +94,9 @@ def calculate_savings_return(dt, current_savings, monthly_saving, interest_rate)
     times = calc_time_array(dt)
     moneys = np.zeros_like(times)
     moneys[0] = current_savings
-    for idx, t in enumerate(times, 1):
-        moneys[i] = moneys[i-1]*(1+interest_rate) + 12.0 * monthly_saving
+    for idx in range(1, len(times)):
+        moneys[idx] = moneys[idx-1]*(1+interest_rate) + 12.0 * monthly_saving
     return moneys
-
-
-
-@app.route('/api/v1/prognosis', methods=['GET'])
-def prognosis():
-    # if len(request.args)==0:
-    #     return "Error: No data fields provided."
-
-    stock_symbol = "QQQ"
-    return_params = compute_stock_parameters(stock_symbol)
-    return_params = { "return_rate": 52.0 * mean_return,
-            "return_variance": 52.0 * var,
-            "dividend": dividend
-        }
-    # Create an empty list for our results
-    results = {}
-
-    # Extract data from get request
-    dt = request.args['time']
-    current_savings = request.args['current_savings']
-    monthly_savings = request.args['monthly_savings']
-    bank_interest = 0.001
-
-    # compute prognosis and package in request
-    mid, low, up = calculate_total_return(dt, current_savings, monthly_savings, bank_interest, return_params[return_rate], return_params[return_variance], return_params[dividend])
-    results['mid'] = mid.tolist()
-    results['low'] = low.tolist()
-    results['up'] = up.tolist()
-    results['savings_only'] = calculate_savings_return(dt, current_savings, monthly_saving, bank_interest).tolist()
-    print(results)
-    return jsonify(results)
 
 def plot_returns(mid, low_bound, up_bound):
     plt.figure(figsize=(10,6))
@@ -136,6 +105,32 @@ def plot_returns(mid, low_bound, up_bound):
     plt.plot(up_bound, label='up')
     plt.legend()
     plt.show()
+
+@app.route('/api/v1/prognosis', methods=['GET'])
+def prognosis():
+    if len(request.args)==0:
+        return "Error: No data fields provided."
+
+    stock_symbol = "QQQ"
+    return_params = compute_stock_parameters(stock_symbol)
+    # Create an empty list for our results
+    results = {}
+
+    # Extract data from get request
+    dt = float(request.args['time'])
+    current_savings = float(request.args['current_savings'])
+    monthly_savings = float(request.args['monthly_savings'])
+    bank_interest = 0.001
+
+    # compute prognosis and package in request
+    mid, low, up = calculate_total_return(dt, current_savings, monthly_savings, bank_interest, return_params["return_rate"], return_params["return_variance"], return_params["dividend"])
+    results['mid'] = mid.tolist()
+    results['low'] = low.tolist()
+    results['up'] = up.tolist()
+    results['savings_only'] = calculate_savings_return(dt, current_savings, monthly_savings, bank_interest).tolist()
+    print(results)
+    return jsonify(results)
+
 
 def main():
     # mid, low, up = stock_etf_yield(10, 0.05, 0.03)
