@@ -3,15 +3,53 @@ import numpy as np
 from scipy.stats import norm
 import requests
 from flask import Flask, request, jsonify
+import json
+import difflib
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
+
+# Store market data in cache to avoid repeated API calls to Alpha Vantage
+symbols = ["QQQ"]
+market_data = {} # symbol : [prices]
+
+
 
 # Derive these from Alpha Vantage data
 INTEREST_RATE = 0.01
 ANNUAL_DIVIDEND = 0.01 # fractional
 STOCK_RETURN = 0.03
 STOCK_RETURN_VAR = 0.01
+
+
+
+def download_market_data(symbols):
+    for symbol in symbols:
+        market_data[symbol] = get_weekly_closing_price(symbol)
+
+def get_closing_price_and_dividend(symbol):
+    URL = "https://www.alphavantage.co/query?function=TIME_SERIES_weekLY_adjusted&symbol=" + symbol + "&outputsize=compact&apikey=LS4GR5WN04ICUVTI"
+    r = requests.get(url = URL)
+    closing_price = []
+    dividends = []
+    timeseriesdata = json.loads(r.text)["Weekly Adjusted Time Series"]
+    for day, vals in timeseriesdata.items():
+        closing_price.append(float(vals["5. adjusted close"]))
+        if float(vals["7. dividend amount"]) > 0.0:
+            dividends.append(float(vals["7. dividend amount"]))
+    return closing_price, np.array(dividends).mean()
+
+def compute_stock_parameters(symbol):
+    symbol = difflib.get_close_matches(symbol, symbols)
+    price_series, dividend = get_closing_price_and_dividend(symbol)
+    pct_changes = np.diff(price_series) / price_series[:-1]
+    log_returns = np.log(1 + pct_changes)
+    mean_return = log_returns.mean()
+    var = log_returns.var()
+    return { "return_rate": 52.0 * mean_return,
+            "return_variance": 52.0 * var,
+            "dividend": dividend
+        }
 
 
 
@@ -67,13 +105,20 @@ def prognosis():
     print(results)
     return jsonify(results)
 
-
+def plot_returns(mid, low_bound, up_bound):
+    plt.figure(figsize=(10,6))
+    plt.plot(mid, label='mid')
+    plt.plot(low_bound, label='low')
+    plt.plot(up_bound, label='up')
+    plt.legend()
+    plt.show()
+    
 def main():
     # mid, low, up = stock_etf_yield(10, 0.05, 0.03)
-    # mid, low, up = calculate_total_return(10, 1000, 100.0, 0.01, 0.15, 0.08, 0.005)
-    # plot_returns(mid, low, up)
+    mid, low, up = calculate_total_return(10, 1000, 100.0, 0.001, 0.27, 0.06, 0.0047)
+    plot_returns(mid, low, up)
 
-    app.run()
+    # app.run()
 
 if __name__ == "__main__":
     main()
