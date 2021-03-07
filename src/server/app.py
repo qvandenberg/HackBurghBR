@@ -123,6 +123,7 @@ def prognosis():
 
     # compute prognosis and package in request
     mid, low, up = calculate_total_return(dt, current_savings, monthly_savings, bank_interest, return_params["return_rate"], return_params["return_variance"], return_params["dividend"])
+    results['time'] = calc_time_array(dt).tolist()
     results['mid'] = mid.tolist()
     results['low'] = low.tolist()
     results['up'] = up.tolist()
