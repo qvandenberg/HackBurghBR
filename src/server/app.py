@@ -127,7 +127,7 @@ def prognosis():
     results['low'] = low.tolist()
     results['up'] = up.tolist()
     results['savings_only'] = calculate_savings_return(dt, current_savings, monthly_savings, bank_interest).tolist()
-    print(results)
+    # print(results)
     return jsonify(results)
 
 
