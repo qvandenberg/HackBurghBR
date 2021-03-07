@@ -56,7 +56,6 @@ def compute_stock_parameters(symbol):
             "dividend": dividend/100.0
         }
 
-
 def calc_time_array(dt):
     return np.linspace(0, dt, int(dt)+1)
 
@@ -133,7 +132,6 @@ def prognosis():
 
 
 def main():
-    # mid, low, up = stock_etf_yield(10, 0.05, 0.03)
     # mid, low, up = calculate_total_return(10, 1000, 100.0, 0.001, 0.27, 0.06, 0.0047)
     # plot_returns(mid, low, up)
 
