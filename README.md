@@ -1,5 +1,8 @@
+
 # HackBurghBR
 BlackRock challenge Hack the Burgh 2021
+
+![logo](https://user-images.githubusercontent.com/32027910/110240813-f5eb9b00-7f4d-11eb-8944-c56588e49f21.png)
 
 ## Challenge motivation
 Our goal here was to make a tool that helps small, beginning investors get started with investing in stocks. 
