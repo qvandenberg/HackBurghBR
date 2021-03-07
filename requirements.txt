@@ -1,61 +1,31 @@
-# This file may be used to create an environment using:
-# $ conda create --name <env> --file <this file>
-# platform: osx-64
-blas=1.0=mkl
-brotlipy=0.7.0=py38haf1e3a3_1000
-ca-certificates=2020.10.14=0
-certifi=2020.6.20=py38_0
-cffi=1.14.3=py38hed5b41f_0
-chardet=3.0.4=py38_1003
-click=7.1.2=py_0
-cryptography=3.1.1=py38hddc9c9b_0
-cycler=0.10.0=py_2
-flask=1.1.2=py_0
-freetype=2.10.4=h4cff582_1
-idna=2.10=py_0
-intel-openmp=2020.2=258
-itsdangerous=1.1.0=py_0
-jinja2=2.11.2=py_0
-jpeg=9d=hbcb3906_0
-kiwisolver=1.3.1=py38h23ab428_0
-libcxx=10.0.0=1
-libedit=3.1.20191231=h1de35cc_1
-libffi=3.3=hb1e8313_2
-libgfortran=3.0.1=h93005f0_2
-libpng=1.6.37=h7cec526_2
-libtiff=4.1.0=hcb84e12_0
-markupsafe=1.1.1=py38h1de35cc_1
-matplotlib=3.3.4=py38h50d1736_0
-matplotlib-base=3.3.4=py38h8b3ea08_0
-mkl=2019.4=233
-mkl-service=2.3.0=py38hfbe908c_0
-mkl_fft=1.2.0=py38hc64f4ea_0
-mkl_random=1.1.1=py38h959d312_0
-ncurses=6.2=h0a44026_1
-numpy=1.19.1=py38h3b9f5b6_0
-numpy-base=1.19.1=py38hcfb5961_0
-olefile=0.46=pyh9f0ad1d_1
-openssl=1.1.1h=haf1e3a3_0
-pillow=7.2.0=py38h83dc5e5_0
-pip=20.2.4=py38_0
-pycparser=2.20=py_2
-pyopenssl=19.1.0=py_1
-pyparsing=2.4.7=pyh9f0ad1d_0
-pysocks=1.7.1=py38_1
-python=3.8.5=h26836e1_1
-python-dateutil=2.8.1=py_0
-python_abi=3.8=1_cp38
-readline=8.0=h1de35cc_0
-requests=2.24.0=py_0
-scipy=1.5.0=py38hbab996c_0
-setuptools=50.3.0=py38h0dc7051_1
-six=1.15.0=py_0
-sqlite=3.33.0=hffcf06c_0
-tk=8.6.10=hb0a8c7a_0
-tornado=6.1=py38h5406a74_1
-urllib3=1.25.11=py_0
-werkzeug=1.0.1=py_0
-wheel=0.35.1=py_0
-xz=5.2.5=h1de35cc_0
-zlib=1.2.11=h1de35cc_3
-zstd=1.3.7=h5bba6e5_0
+brotlipy==0.7.0
+certifi==2020.6.20
+cffi @ file:///opt/concourse/worker/volumes/live/b9607b09-b777-4ff7-53dc-287727eb8574/volume/cffi_1600699191154/work
+chardet==3.0.4
+click==7.1.2
+cryptography @ file:///opt/concourse/worker/volumes/live/aeb63a26-659e-4edb-5405-74ba8e0c76f2/volume/cryptography_1601046839724/work
+cycler==0.10.0
+Flask==1.1.2
+idna @ file:///tmp/build/80754af9/idna_1593446292537/work
+itsdangerous==1.1.0
+Jinja2==2.11.2
+kiwisolver @ file:///opt/concourse/worker/volumes/live/0b2f3e77-eaa3-4995-7dd0-c994762fcbde/volume/kiwisolver_1612282417472/work
+MarkupSafe @ file:///opt/concourse/worker/volumes/live/cb778296-98db-45ad-411e-6f726e102dc3/volume/markupsafe_1594371638608/work
+matplotlib @ file:///opt/concourse/worker/volumes/live/41e8cd50-031f-4dda-5787-dd3c4f4e0f08/volume/matplotlib-suite_1613407855571/work
+mkl-fft==1.2.0
+mkl-random==1.1.1
+mkl-service==2.3.0
+numpy @ file:///opt/concourse/worker/volumes/live/c646f6b9-b398-438d-7dc7-c7142e0ba44b/volume/numpy_and_numpy_base_1596235504536/work
+olefile @ file:///home/conda/feedstock_root/build_artifacts/olefile_1602866521163/work
+Pillow @ file:///Users/runner/miniforge3/conda-bld/pillow_1593693221521/work
+pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
+pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1594392929924/work
+pyparsing==2.4.7
+PySocks @ file:///opt/concourse/worker/volumes/live/85a5b906-0e08-41d9-6f59-084cee4e9492/volume/pysocks_1594394636991/work
+python-dateutil==2.8.1
+requests @ file:///tmp/build/80754af9/requests_1592841827918/work
+scipy @ file:///opt/concourse/worker/volumes/live/7f5e51f8-abf3-4409-4c56-a4fb14cc9869/volume/scipy_1593104185999/work
+six==1.15.0
+tornado @ file:///Users/runner/miniforge3/conda-bld/tornado_1610094711612/work
+urllib3 @ file:///tmp/build/80754af9/urllib3_1603305693037/work
+Werkzeug==1.0.1
