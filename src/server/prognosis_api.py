@@ -21,36 +21,40 @@ ANNUAL_DIVIDEND = 0.01 # fractional
 STOCK_RETURN = 0.03
 STOCK_RETURN_VAR = 0.01
 
-
-
-def download_market_data(symbols):
-    for symbol in symbols:
-        market_data[symbol] = get_weekly_closing_price(symbol)
-
-def get_closing_price_and_dividend(symbol):
+def get_closing_price_and_dividend(symbol, max_weeks):
+    # URL = "https://www.alphavantage.co/query?function=TIME_SERIES_daiLY_adjusted&symbol=" + symbol + "&outputsize=compact&apikey=LS4GR5WN04ICUVTI"
     URL = "https://www.alphavantage.co/query?function=TIME_SERIES_weekLY_adjusted&symbol=" + symbol + "&outputsize=compact&apikey=LS4GR5WN04ICUVTI"
+    # URL = "https://www.alphavantage.co/query?function=TIME_SERIES_monthLY_adjusted&symbol=QQQ&apikey=LS4GR5WN04ICUVTI"
     r = requests.get(url = URL)
     closing_price = []
     dividends = []
+    # timeseriesdata = json.loads(r.text)["Time Series (Daily)"]
     timeseriesdata = json.loads(r.text)["Weekly Adjusted Time Series"]
+    # timeseriesdata = json.loads(r.text)["Monthly Adjusted Time Series"]
     for day, vals in timeseriesdata.items():
-        closing_price.append(float(vals["5. adjusted close"]))
-        if float(vals["7. dividend amount"]) > 0.0:
-            dividends.append(float(vals["7. dividend amount"]))
+        if (len(closing_price) <= max_weeks):
+            closing_price.append(float(vals["5. adjusted close"]))
+            if float(vals["7. dividend amount"]) > 0.0:
+                dividends.append(float(vals["7. dividend amount"]))
+        else:
+            break
+    closing_price.reverse() # so latest month comes last in list
     return closing_price, np.array(dividends).mean()
 
 def compute_stock_parameters(symbol):
-    symbol = difflib.get_close_matches(symbol, symbols)
-    price_series, dividend = get_closing_price_and_dividend(symbol)
+    symbol = difflib.get_close_matches(symbol, symbols)[0]
+    price_series, dividend = get_closing_price_and_dividend(symbol, 100)
+    print(price_series)
+    plt.plot(price_series)
+    plt.show()
     pct_changes = np.diff(price_series) / price_series[:-1]
     log_returns = np.log(1 + pct_changes)
     mean_return = log_returns.mean()
     var = log_returns.var()
     return { "return_rate": 52.0 * mean_return,
             "return_variance": 52.0 * var,
-            "dividend": dividend
+            "dividend": dividend/100.0
         }
-
 
 
 def calc_time_array(dt):
@@ -86,22 +90,42 @@ def calculate_total_return(dt, starting_savings, monthly_saving, interest_rate, 
         up_bound[t] = total_money[t][int(0.8*num_iterations)]
     return mid, low_bound, up_bound
 
+def calculate_savings_return(dt, current_savings, monthly_saving, interest_rate):
+    times = calc_time_array(dt)
+    moneys = np.zeros_like(times)
+    moneys[0] = current_savings
+    for idx, t in enumerate(times, 1):
+        moneys[i] = moneys[i-1]*(1+interest_rate) + 12.0 * monthly_saving
+    return moneys
+
+
+
 @app.route('/api/v1/prognosis', methods=['GET'])
 def prognosis():
     # if len(request.args)==0:
     #     return "Error: No data fields provided."
 
+    stock_symbol = "QQQ"
+    return_params = compute_stock_parameters(stock_symbol)
+    return_params = { "return_rate": 52.0 * mean_return,
+            "return_variance": 52.0 * var,
+            "dividend": dividend
+        }
     # Create an empty list for our results
     results = {}
 
     # Extract data from get request
-    # dt = request.
+    dt = request.args['time']
+    current_savings = request.args['current_savings']
+    monthly_savings = request.args['monthly_savings']
+    bank_interest = 0.001
 
     # compute prognosis and package in request
-    mid, low, up = calculate_total_return(10, 1000, 100.0, 0.01, 0.15, 0.08, 0.005)
+    mid, low, up = calculate_total_return(dt, current_savings, monthly_savings, bank_interest, return_params[return_rate], return_params[return_variance], return_params[dividend])
     results['mid'] = mid.tolist()
     results['low'] = low.tolist()
     results['up'] = up.tolist()
+    results['savings_only'] = calculate_savings_return(dt, current_savings, monthly_saving, bank_interest).tolist()
     print(results)
     return jsonify(results)
 
@@ -112,13 +136,13 @@ def plot_returns(mid, low_bound, up_bound):
     plt.plot(up_bound, label='up')
     plt.legend()
     plt.show()
-    
+
 def main():
     # mid, low, up = stock_etf_yield(10, 0.05, 0.03)
-    mid, low, up = calculate_total_return(10, 1000, 100.0, 0.001, 0.27, 0.06, 0.0047)
-    plot_returns(mid, low, up)
+    # mid, low, up = calculate_total_return(10, 1000, 100.0, 0.001, 0.27, 0.06, 0.0047)
+    # plot_returns(mid, low, up)
 
-    # app.run()
+    app.run()
 
 if __name__ == "__main__":
     main()
